@@ -47,6 +47,7 @@ public class Agent : MonoBehaviour
     }
     private void Update()
     {
+        // DEBUG PORPUSE
         if(Input.GetKeyDown(KeyCode.F))
         {
             _graphMoveBehaviour.RecalculatePathVar = true;

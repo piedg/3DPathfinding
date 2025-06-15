@@ -64,7 +64,7 @@ public class GraphVolume : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.white;
+        Gizmos.color = Color.green;
         Gizmos.DrawWireCube(transform.position, volumeSize);
         foreach (var node in _graph.Nodes)
         {

@@ -6,7 +6,7 @@ using UnityEngine;
 [Serializable]
 public class LookWhereYouMoveSteeringBehaviour : SteeringBehaviour
 {
-    [SerializeField] private float _acceptanceRange = 5;
+    [SerializeField] private float acceptanceRange = 5;
 
     public override SteeringOutput GetSteering(Agent agent)
     {
