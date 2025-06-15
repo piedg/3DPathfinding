@@ -262,35 +262,42 @@ MonoBehaviour:
   _maxAngularSpeed: 360
   _radius: 1
   _steering:
-  - rid: 1496326785438580736
-  - rid: 1496326785438580737
-  - rid: 1496326789023399936
+  - rid: 1496326828311707657
+  - rid: 1496326828311707655
+  - rid: 1496326828311707656
   - rid: 1496326789023399938
   references:
     version: 2
     RefIds:
-    - rid: 1496326785438580736
-      type: {class: PathFollowSteeringBehaviour, ns: , asm: Assembly-CSharp}
+    - rid: 1496326789023399938
+      type: {class: AvoidWallSteeringBehaviour, ns: , asm: Assembly-CSharp}
       data:
-        _maxAcceleration: 100
-        _pathToFollow: {fileID: 0}
-        _reachRadius: 1
-        _timeToTarget: 0.1
-    - rid: 1496326785438580737
-      type: {class: LookWhereYouMoveSteeringBehaviour, ns: , asm: Assembly-CSharp}
-      data:
-        _acceptanceRange: 5
-    - rid: 1496326789023399936
+        maxAcceleration: 100
+        rayLength: 1
+        rayAngle: 45
+        collisionMask:
+          serializedVersion: 2
+          m_Bits: 0
+    - rid: 1496326828311707655
       type: {class: AvoidAgentSteeringBehaviour, ns: , asm: Assembly-CSharp}
       data:
         _neighbourRange: 3
         _maxAcceleration: 100
-    - rid: 1496326789023399938
+    - rid: 1496326828311707656
       type: {class: AvoidWallSteeringBehaviour, ns: , asm: Assembly-CSharp}
       data:
-        _maxAcceleration: 100
-        _rayLength: 3
-        _rayAngle: 45
-        _collisionMask:
+        maxAcceleration: 50
+        rayLength: 2
+        rayAngle: 45
+        collisionMask:
           serializedVersion: 2
-          m_Bits: 64
+          m_Bits: 128
+    - rid: 1496326828311707657
+      type: {class: GraphMoveBehaviour, ns: , asm: Assembly-CSharp}
+      data:
+        maxAcceleration: 100
+        worldGraph: {fileID: 0}
+        reachRadius: 0.5
+        timeToTarget: 0.1
+        recalculatePath: 0
+        target: {fileID: 0}
