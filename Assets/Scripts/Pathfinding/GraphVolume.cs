@@ -29,7 +29,7 @@ public class GraphVolume : MonoBehaviour
                  x < transform.position.x + (volumeSize.x / 2);
                  x += nodeDistance)
             {
-                if (Physics.Raycast((Vector3)new float3(x, transform.position.y + (volumeSize.y / 2), z), (Vector3)math.down(),
+                if (Physics.Raycast(new float3(x, transform.position.y + (volumeSize.y / 2), z), math.down(),
                         out var hit, volumeSize.z + math.EPSILON, floorMask | collisionMask))
                 {
                     if (floorMask == (floorMask | (1 << hit.transform.gameObject.layer)))
@@ -52,7 +52,7 @@ public class GraphVolume : MonoBehaviour
                 if (math.abs(secondNode.Value.x - firstNode.Value.x) <= nodeDistance &&
                     math.abs(secondNode.Value.z - firstNode.Value.z) <= nodeDistance)
                 {
-                    if (!Physics.Raycast((Vector3)firstNode.Value, (Vector3)math.normalizesafe(secondNode.Value - firstNode.Value),
+                    if (!Physics.Raycast(firstNode.Value, math.normalizesafe(secondNode.Value - firstNode.Value),
                             math.distance(firstNode.Value, secondNode.Value) * 2, collisionMask))
                     {
                         _graph.AddEdge(firstNode, secondNode, math.distancesq(firstNode.Value, secondNode.Value));
