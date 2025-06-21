@@ -77,4 +77,3 @@ public class AvoidAgentSteeringBehaviour : SteeringBehaviour
         return true;
     }
 }
-

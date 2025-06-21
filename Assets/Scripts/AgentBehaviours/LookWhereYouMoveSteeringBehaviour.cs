@@ -2,46 +2,46 @@ using System;
 using Unity.Mathematics;
 using UnityEngine;
 
-
 [Serializable]
 public class LookWhereYouMoveSteeringBehaviour : SteeringBehaviour
 {
-    [SerializeField] private float acceptanceRange = 5;
+    [SerializeField] private float _acceptanceRange = 5f;
+    [SerializeField] private float _rotationSpeed = 10f;
+    [SerializeField] private float _velocityThreshold = 0.1f;
 
     public override SteeringOutput GetSteering(Agent agent)
     {
-        var targetOrientation = math.atan2(agent.LinearVelocity.x, agent.LinearVelocity.z);
-        var delta = MapToRange(targetOrientation) - MapToRange(agent.Orientation);
+        var speed = math.length(agent.LinearVelocity);
 
-        var targetAngularSpeed = delta;
-
-        var direction = math.sign(delta);
-        var targetAngularVelocity = direction * targetAngularSpeed;
-
-        var result = new SteeringOutput
+        if (speed < _velocityThreshold)
         {
-            Linear = 0, Angular = (targetAngularVelocity - agent.AngularVelocity) / Time.fixedDeltaTime
+            return new SteeringOutput { Angular = -agent.AngularVelocity * 0.9f };
+        }
+
+        var targetOrientation = math.atan2(agent.LinearVelocity.x, agent.LinearVelocity.z);
+        var delta = MapToRange(targetOrientation - agent.Orientation);
+
+        var dynamicAcceptanceRange = math.radians(_acceptanceRange);
+
+        if (math.abs(delta) < dynamicAcceptanceRange)
+        {
+            return new SteeringOutput { Angular = -agent.AngularVelocity * 0.8f };
+        }
+
+        var targetRotation = math.clamp(delta * _rotationSpeed, -agent.MaxAngularSpeed, agent.MaxAngularSpeed);
+        var smoothedRotation = math.lerp(agent.AngularVelocity, targetRotation, 0.15f);
+
+        return new SteeringOutput
+        {
+            Linear = 0,
+            Angular = smoothedRotation
         };
-
-        Debug.DrawRay(agent.Position, math.mul(quaternion.Euler(0, targetOrientation, 0), math.forward()), Color.cyan);
-
-        result.Angular = math.sign(result.Angular) * math.clamp(math.abs(result.Angular), 0, agent.MaxAngularSpeed);
-        return result;
     }
 
     private float MapToRange(float angle)
     {
-        const float twoPi = 2 * math.PI;
-        while (angle < 0)
-        {
-            angle += twoPi;
-        }
-
-        while (angle > twoPi)
-        {
-            angle -= twoPi;
-        }
-
+        while (angle > math.PI) angle -= 2 * math.PI;
+        while (angle < -math.PI) angle += 2 * math.PI;
         return angle;
     }
 }

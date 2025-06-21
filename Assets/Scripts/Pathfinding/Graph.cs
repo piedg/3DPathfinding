@@ -235,9 +235,13 @@ public class Graph
         result.Reverse();
         return result;
     }
-
+    
     public float3 GetNearestGraphPoint(float3 position)
     {
+        if (_nodes.Count == 0)
+        {
+            return float3.zero;
+        }
         var nearest = _nodes[0];
         var nearestDistance = math.distancesq(_nodes[0], position);
         for (var i = 1; i < _nodes.Count; i++)
@@ -249,7 +253,8 @@ public class Graph
                 nearest = _nodes[i];
             }
         }
-
         return nearest;
     }
+
+ 
 }

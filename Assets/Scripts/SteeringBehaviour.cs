@@ -11,6 +11,10 @@ public struct SteeringOutput
 [Serializable]
 public abstract class SteeringBehaviour
 {
+    [SerializeField]
+    protected int _weight = 0;
+
+    public virtual int Weight => _weight;
     public abstract SteeringOutput GetSteering(Agent agent);
     protected LayerMask AgentLayer;
 }

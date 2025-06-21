@@ -32,7 +32,7 @@ public class Agent : MonoBehaviour
     }
 
     private GraphMoveBehaviour _graphMoveBehaviour;
-    
+
     private void Start()
     {
         // DEBUG PORPUSE
@@ -43,26 +43,38 @@ public class Agent : MonoBehaviour
                 _graphMoveBehaviour = sb as GraphMoveBehaviour;
             }
         }
-      
     }
+
     private void Update()
     {
         // DEBUG PORPUSE
-        if(Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             _graphMoveBehaviour.RecalculatePathVar = true;
         }
     }
- 
+
     private void FixedUpdate()
     {
-        
+        float3 totalLinear = float3.zero;
+        float totalAngular = 0f;
+        int maxPriority = int.MinValue;
+
         foreach (var currentSteering in _steering)
         {
             var steering = currentSteering.GetSteering(this);
-            LinearVelocity += steering.Linear * Time.fixedDeltaTime;
-            AngularVelocity += steering.Angular * Time.fixedDeltaTime;
+            totalLinear += steering.Linear;
+
+            // Applica solo l'Angular del behaviour con priorità più alta
+            if (currentSteering.Weight > maxPriority && math.abs(steering.Angular) > 0.0001f)
+            {
+                totalAngular = steering.Angular;
+                maxPriority = currentSteering.Weight;
+            }
         }
+
+        LinearVelocity += totalLinear * Time.fixedDeltaTime;
+        AngularVelocity += totalAngular * Time.fixedDeltaTime;
 
         LinearVelocity = math.normalizesafe(LinearVelocity) * math.min(math.length(LinearVelocity), MaxLinearSpeed);
         AngularVelocity = math.clamp(math.abs(AngularVelocity), 0, MaxAngularSpeed) * math.sign(AngularVelocity);
